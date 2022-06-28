@@ -1,7 +1,7 @@
 class BBCanvas extends React.Component {
     constructor(props) {
         super(props);
-        this.comunicationWS = 
+        this.comunicationWS =
             new WSBBChannel(BBServiceURL(),
                 (msg) => {
                     var obj = JSON.parse(msg);
@@ -47,7 +47,10 @@ class BBCanvas extends React.Component {
 }
 
 function BBServiceURL() {
-    return 'ws://localhost:8080/bbService';
+    var host = window.location.host;
+    var url = 'wss://' + (host) + '/bbService';
+    console.log("URL Calculada: " + url);
+    return url;
 }
 
 class WSBBChannel {
@@ -65,9 +68,9 @@ class WSBBChannel {
     onMessage(evt) {
         console.log("In onMessage", evt);
         // Este if permite que el primer mensaje del servidor no se tenga encuenta.
-            // El primer mensaje solo confirma que se estableció la conexión.
-            // De ahí en adelante intercambiaremos solo puntos(x,y) con el servidor
-            if(evt.data != "Connection established.") {
+        // El primer mensaje solo confirma que se estableció la conexión.
+        // De ahí en adelante intercambiaremos solo puntos(x,y) con el servidor
+        if (evt.data != "Connection established.") {
             this.receivef(evt.data);
         }
     }
